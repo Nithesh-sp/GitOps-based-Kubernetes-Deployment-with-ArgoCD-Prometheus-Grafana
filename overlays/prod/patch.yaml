@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  replicas: 3   # Base, HPA will scale further
+  template:
+    spec:
+      containers:
+        - name: django-container
+          image: your-dockerhub-username/django-app:prod
+          resources:
+            requests:
+              cpu: "300m"
+              memory: "512Mi"
+            limits:
+              cpu: "800m"
+              memory: "1Gi"
+          env:
+            - name: DEBUG
+              value: "False"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-ingress
+spec:
+  rules:
+    - host: django.yourdomain.com
