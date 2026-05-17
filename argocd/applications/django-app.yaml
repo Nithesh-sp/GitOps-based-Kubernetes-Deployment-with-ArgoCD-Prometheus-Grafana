@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: django-app
+  namespace: argocd
+spec:
+  project: gitops-project
+
+  source:
+    repoURL: https://github.com/your-username/gitops-autoscaling-platform
+    targetRevision: main
+    path: apps/django-app/overlays/prod
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
